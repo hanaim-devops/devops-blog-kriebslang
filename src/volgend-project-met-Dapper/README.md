@@ -13,7 +13,7 @@ Hoewel beide libraries ORM-functionaliteiten bieden, verschillen ze in mogelijkh
 Dapper (www.learndapper.com) is dapper gericht op eenvoud en snelheid, terwijl Entity Framework uitgebreidere 
 functionaliteit biedt zoals change tracking, SQL-generatie en database-migraties. 
 
-Plaatje
+<img src="plaatjes/functionality_dapper.png">
 
 Uit de bovenstaande tabel blijkt duidelijk dat Dapper minder functionaliteit biedt dan Entity Framework, 
 maar deze eenvoud kan ook een voordeel zijn. Voor sommige ontwikkelaars is de beperkte functionaliteit juist 
@@ -26,13 +26,15 @@ Ontwikkelaars schrijven zelf de SQL-statements, en Dapper voert ze uit terwijl d
 Dit geeft volledige controle over de queries. Wat voor sommige developers juist een voordeel is.
 Een voorbeeld van hoe Dapper gebruikt kan worden om gegevens op te halen:
 
-Plaatje
+<img src="plaatjes/select.png">
 
 
 In tegenstelling tot Entity Framework, waar LINQ wordt gebruikt om SQL te genereren, vereist Dapper dat 
 ontwikkelaars zelf SQL schrijven. Dit betekent dat er kennis van SQL wordt vereist om met Dapper te werken. Voor ontwikkelaars 
 zonder SQL-ervaring kan dit een hindernis zijn. Entity Framework daarentegen werkt met LINQ, wat de drempel voor 
 developers kan verlagen.
+
+<img src="plaatjes/insert.png">
 
 Zoals je kunt zien, moet de ontwikkelaar het SQL-statement zelf opbouwen, wat kennis van SQL vereist. 
 In tegenstelling tot Entity Framework, waar deze kennis niet nodig is.
@@ -45,11 +47,22 @@ terug van hoe de verschillende benchmarks gescoord hebben tegenover elkaar. Om D
 heb zijn er drie verschillende benchmarks geschreven waarvan hieronder het resultaat staat. Elke benchmark wordt twintig keer 
 uitgevoerd waarna voor elke benchmark het gemiddelde uitvoertijd wordt berekend.
 
+<img src="plaatjes/benchmark_select.png">
+
 Uit de resultaten blijkt dat Dapper aanzienlijk sneller is dan Entity Framework, met name omdat Dapper geen extra stappen 
 zoals SQL-generatie hoeft uit te voeren. Bij Entity Framework moeten LINQ-expressies eerst worden omgezet naar SQL, wat extra tijd kost.
-Opvallend genoeg bleek dat zelfs de "raw SQL"-functionaliteit van Entity Framework, waarbij directe SQL wordt uitgevoerd, 
-trager is dan de versie met LINQ-expressies. Dit komt doordat Entity Framework de meegegeven SQL alsnog omzet naar LINQ-expressies 
-en deze vervolgens weer naar SQL transformeert, zoals ook beschreven staat in de officiële documentatie (https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver) . Dit verklaart waarom de uitvoeringstijd langer is dan verwacht.
+Opvallend genoeg bleek dat zelfs de "FromSQL"-functionaliteit van Entity Framework, waarbij directe SQL wordt uitgevoerd, trager is dan de versie met LINQ-expressies.
+In de documentatie over queries binnen Entity Framework staat de volgende afbeelding:
+
+<img src="plaatjes/raw_sql.png">
+
+In deze afbeelding wordt getoond hoe de FromSQL methode gebruikt wordt om een eigen SQL query te gebruiken. 
+Na de query wordt de query afgemaakt met LINQ expressies. Hier zit de overhead. De ingevoerde SQL code moet worden 
+omgezet in LINQ expressies om zo gebruikt te worden in de query. Nadat alles in LINQ expressies is gezet zal het 
+weer worden omgezet in SQL code waarna het uitgevoerd wordt. Dit betekent dat er twee vertaal stappen moeten worden 
+uitgevoerd voordat de query kan worden uitgevoerd. Hierdoor is de uitvoeringstijd trager als bij een query waar alleen 
+gewerkt werd met LINQ expressies.
+
 Uit dit onderzoek blijkt dat Dapper een lagere uitvoeringstijd heeft bij het ophalen van entiteiten uit een database 
 maar heeft meer technische kennis nodig van SQL. Entity Framework biedt daarentegen meer functionaliteit en een lagere leercurve 
 dankzij LINQ. Het kiezen tussen Dapper en Entity Framework hangt af van de eisen van de opdrachtgevers of de developers. 
@@ -58,13 +71,16 @@ In gevallen waarbij developers zich niet willen druk maken over het schrijven va
 voor Entity Framework waarbij er gebruikgemaakt kan worden van LINQ expressies.
 
 Bronnen
-https://www.c-sharpcorner.com/article/dapper-vs-entity-framework-core/
-https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a
-https://www.learndapper.com/dapper-vs-entity-framework
-https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382
-https://www.learndapper.com/
-https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382
-https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver
+<ul>
+    <li>https://www.c-sharpcorner.com/article/dapper-vs-entity-framework-core/</li>
+    <li>https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a</li>
+    <li>https://www.learndapper.com/dapper-vs-entity-framework</li>
+    <li>https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382</li>
+    <li>https://www.learndapper.com/</li>
+    <li>https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver</li>
+    <li>https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382</li>`
+</ul>
+
 
 
 
