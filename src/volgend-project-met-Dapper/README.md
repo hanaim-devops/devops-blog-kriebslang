@@ -4,7 +4,7 @@ te voeren binnen .NET of .NET Core applicaties. Het mapt het resultaat van deze 
 applicatie worden gebruikt. In deze blogpost zal Dapper vergeleken worden met Entity Framework (EF) en wordt er 
 toegelicht of Dapper wellicht een betere keuze is voor een volgend project.
 
-<img src="plaatjes/mdbook_logo.png" width="250" align="right" alt="mdbook logo om weg te halen" title="maar vergeet de alt tekst niet">
+<img src="plaatjes/dapper.jpg" width="250" align="right" alt="dapper logo" title="dapper">
 
 *[Jochem Kalsbeek, oktober 2024.](https://github.com/hanaim-devops/blog-student-naam)*
 <hr/>
