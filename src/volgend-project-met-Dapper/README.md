@@ -72,13 +72,13 @@ voor Entity Framework waarbij er gebruikgemaakt kan worden van LINQ expressies.
 
 Bronnen
 <ul>
-    <li>https://www.c-sharpcorner.com/article/dapper-vs-entity-framework-core/</li>
-    <li>https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a</li>
-    <li>https://www.learndapper.com/dapper-vs-entity-framework</li>
-    <li>https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382</li>
+    <li>https://www.c-sharpcorner.com/article/dapper-vs-entity-framework-core/ - Geraadpleegd op 9 oktober 2024</li>
+    <li>https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a - Geraadpleegd op 9 oktober 2024</li>
+    <li>https://www.learndapper.com/dapper-vs-entity-framework - Geraadpleegd op 9 oktober 2024</li>
+    <li>https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382 - Geraadpleegd op 9 oktober 2024</li>
     <li>https://www.learndapper.com/</li>
-    <li>https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver</li>
-    <li>https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382</li>`
+    <li>https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver - Geraadpleegd op 9 oktober 2024</li>
+    <li>https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382 - Geraadpleegd op 9 oktober 2024</li>`
 </ul>
 
 
