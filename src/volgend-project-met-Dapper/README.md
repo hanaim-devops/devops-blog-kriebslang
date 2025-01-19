@@ -1,85 +1,216 @@
 # Volgend project met Dapper?
-Dapper is een lichtgewicht open-source object-relational mapping (ORM) library, ontworpen om efficiënt SQL queries uit 
-te voeren binnen .NET of .NET Core applicaties. Het mapt het resultaat van deze queries naar de objecten die in je 
-applicatie worden gebruikt. In deze blogpost zal Dapper vergeleken worden met Entity Framework (EF) en wordt er 
-toegelicht of Dapper wellicht een betere keuze is voor een volgend project.
+Bij het bouwen van .NET applicaties spelen ORM’s een grote rol voor het ophalen van data. Twee populaire opties zijn Dapper, 
+een mico-ORM, en Entity Framework, een full-featured ORM. Beide ORM’s hebben beide hun eigen aanpak voor het ophalen van data. 
+Entity Framework zorgt ervoor dat developers zich geen druk hoeven te maken over het schrijven van SQL of het zelf uitvoeren van migraties 
+op een database. Dapper daarentegen dwingt de developer hierbij om zelf zijn 
+verantwoordelijkheid te nemen. Het zelf schrijven van SQL en het zelf uitvoeren van migraties op de database zijn taken 
+die vallen onder de verantwoordelijkheid van de gebruiker. In deze blogpost ga ik door middel van een hands-on karakter 
+onderzoek doen naar hoe Dapper werkt en waarom jouw volgend project misschien wel Dapper moet gebruiken.
 
 <img src="plaatjes/dapper.jpg" width="250" align="right" alt="dapper logo" title="dapper">
 
 *[Jochem Kalsbeek, oktober 2024.](https://github.com/hanaim-devops/blog-student-naam)*
 <hr/>
 
-Hoewel beide libraries ORM-functionaliteiten bieden, verschillen ze in mogelijkheden. Volgens de officiële website van 
-Dapper (www.learndapper.com) is dapper gericht op eenvoud en snelheid, terwijl Entity Framework uitgebreidere 
-functionaliteit biedt zoals change tracking, SQL-generatie en database-migraties. 
+De hoofdzaak van deze blogpost is het leren begrijpen van hoe data kan worden beheerd aan de hand van Dapper en hoe dit zich 
+verhoudt met Entity Framework op het gebied van gebruiksvriendelijkheid, performance en learnability. Daarbij beschouw 
+ik hoe Entity Framework precies werkt als bijzaak. Hierover worden in deze hands-on geen concrete voorbeelden gegeven.
 
-<img src="plaatjes/functionality_dapper.png">
+## Cheapest Flight Tickets
 
-Uit de bovenstaande tabel blijkt duidelijk dat Dapper minder functionaliteit biedt dan Entity Framework, 
-maar deze eenvoud kan ook een voordeel zijn. Voor sommige ontwikkelaars is de beperkte functionaliteit juist 
-aantrekkelijk omdat het meer controle biedt over de uitgevoerde SQL en de manier waarop migraties worden uitgevoerd. Voor 
-andere developers is dit juist een hindernis omdat ze zelf verantwoordelijk zijn voor het schrijven van SQL code of het 
-uit laten voeren van migrations.
+### 1. Opzetten Applicatie
+In deze hands-on tutorial richten we ons op het opzetten van een solution voor een fictieve applicatie genaamd ‘Cheapest Flight Tickets’. 
+Het doel van deze applicatie is om de performance van Dapper te vergelijken met die van Entity Framework in een benchmark. 
+Deze solution bevat de volgende twee projecten:
+- CheapestFlightTickets.Benchmark: Dit is een console project, hierin worden de benchmarks uitgevoerd om de performance te vergelijken. 
+Dit project bevat de benchmark-logica en meet hoe snel Dapper en Entity Framework operaties kunnen uitvoeren.
+- CheapestFlightTickets.Data: Dit project bevat de logica voor het beheren van de data, inclusief de database models voor zowel Dapper als Entity Framework. 
+Dit project wordt gebruikt door het console project.
 
-Volgens de officiële website van Dapper (www.learndapper.com) is de kracht van Dapper dat het simpel wordt gehouden. 
-Ontwikkelaars schrijven zelf de SQL-statements, en Dapper voert ze uit terwijl de resultaten worden gemapt naar objecten. 
-Dit geeft volledige controle over de queries. Wat voor sommige developers juist een voordeel is.
-Een voorbeeld van hoe Dapper gebruikt kan worden om gegevens op te halen:
+Maak beide projecten aan in de solution en installeer Dapper samen met Entity Framework in het data project. 
+Om Dapper te installeren in het data project dien je alleen een package te installeren met het volgende commando:
 
-<img src="plaatjes/select.png">
+```bash
+    dotnet add CheapestFlightTickets.Data package Dapper
+```
 
+Als je dit commando hebt uitgevoerd is Dapper geïnstalleerd en is het klaar voor gebruik. 
+De volgende stap is het installeren en configureren van Entity Framework. Hoe dit moet laat ik in deze hands-on achterwege maar is <a href="https://github.com/hanaim-devops/devops-blog-kriebslang/tree/main/CheapestPlaneTickets">hier</a> terug te zien. 
+De volgende stap is het schrijven van Dapper query’s.
 
-In tegenstelling tot Entity Framework, waar LINQ wordt gebruikt om SQL te genereren, vereist Dapper dat 
-ontwikkelaars zelf SQL schrijven. Dit betekent dat er kennis van SQL wordt vereist om met Dapper te werken. Voor ontwikkelaars 
-zonder SQL-ervaring kan dit een hindernis zijn. Entity Framework daarentegen werkt met LINQ, wat de drempel voor 
-developers kan verlagen.
+### 2. Query's schrijven met Dapper
+Gebruikers van Cheapest Flight Tickets willen graag een lijst van vluchten kunnen inzien met een prijs erbij. 
+Hiervoor moet er een Dapper query worden geschreven die deze lijst met vluchten kan ophalen uit de database. 
+Hieronder staat een voorbeeld van hoe een query kan worden opgesteld met Dapper:
 
-<img src="plaatjes/insert.png">
+```csharp
+    public Flight? GetFlight(int id)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        connection.Open();
+        var sql = $"""
+                   
+                           SELECT 
+                               f.Id, 
+                               f.DepartureTime, 
+                               f.ArrivalTime, 
+                               f.Price, 
+                               f.PlaneId, 
+                               p.Id, 
+                               p.Model 
+                           FROM Flights f
+                           WHERE f.Id = @Id
+                   """;
 
-Zoals je kunt zien, moet de ontwikkelaar het SQL-statement zelf opbouwen, wat kennis van SQL vereist. 
-In tegenstelling tot Entity Framework, waar deze kennis niet nodig is.
+        return connection.Query<Flight>(sql,
+                param: new { Id = id })
+            .FirstOrDefault();
+    }
+```
 
-Naast dat er onderzoek is verricht naar de gebruiksgemak en leercurve van Dapper tegenover 
-Entity Framework is er ook onderzoek gedaan naar de prestaties tegenover Entity Framework. 
-Om hier onderzoek naar te doen heb is er gebruik gemaakt van BenchmarkDotNet. Deze package helpt developers om voor functies benchmarks te 
-maken waarin de performance van de functies wordt getest. Naderhand geeft BenchmarkDotNet een uitgebreid resultaat 
-terug van hoe de verschillende benchmarks gescoord hebben tegenover elkaar. Om Dapper te vergelijken met Entity Framework 
-heb zijn er drie verschillende benchmarks geschreven waarvan hieronder het resultaat staat. Elke benchmark wordt twintig keer 
-uitgevoerd waarna voor elke benchmark het gemiddelde uitvoertijd wordt berekend.
+Hierbij is duidelijk te zien dat Dapper eigenlijk niet veel meer is dan een verzameling extension methods op een 
+SQLConnection die we kennen uit ADO.NET. Een van de verschillen met bijvoorbeeld Entity Framework is dat je bij Dapper 
+zelf SQL moet schrijven terwijl bij Entity Framework dit voor jou geregeld wordt doordat je LINQ expressies kan gebruiken. 
+Dapper biedt echter wel de mogelijkheid tot het gebruik van geparametriseerde query’s zoals je in het voorbeeld ziet.
 
-<img src="plaatjes/benchmark_select.png">
+#### Multimapping
+Vorig voorbeeld mist nog iets. Model Flight kent namelijk een one-to-one-relation met Plane. Dapper laadt niet automatisch gerelateerde entiteiten. 
+Gebruikers moeten zelf joins schrijven om data uit andere tabellen erbij op te halen. Dapper biedt echter wel de mogelijkheid om gerelateerde data te mappen. 
+Als we de vorige query er weer bij pakken en we breiden deze verder uit met een join om het bijbehorende vliegtuig op te halen dan krijg je het volgende resultaat:
 
-Uit de resultaten blijkt dat Dapper aanzienlijk sneller is dan Entity Framework, met name omdat Dapper geen extra stappen 
-zoals SQL-generatie hoeft uit te voeren. Bij Entity Framework moeten LINQ-expressies eerst worden omgezet naar SQL, wat extra tijd kost.
-Opvallend genoeg bleek dat zelfs de "FromSQL"-functionaliteit van Entity Framework, waarbij directe SQL wordt uitgevoerd, trager is dan de versie met LINQ-expressies.
-In de documentatie over queries binnen Entity Framework staat de volgende afbeelding:
+```csharp
+    public Flight? GetFlight(int id)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        connection.Open();
+        var sql = $"""
+                   
+                           SELECT 
+                               f.Id, 
+                               f.DepartureTime, 
+                               f.ArrivalTime, 
+                               f.Price, 
+                               f.PlaneId, 
+                               p.Id, 
+                               p.Model 
+                           FROM Flights f
+                           INNER JOIN Planes p ON f.PlaneId = p.Id
+                           WHERE f.Id = @Id
+                   """;
 
-<img src="plaatjes/raw_sql.png">
+        return connection.Query<Flight>(sql,
+                param: new { Id = id })
+            .FirstOrDefault();
+    }
+```
 
-In deze afbeelding wordt getoond hoe de FromSQL methode gebruikt wordt om een eigen SQL query te gebruiken. 
-Na de query wordt de query afgemaakt met LINQ expressies. Hier zit de overhead. De ingevoerde SQL code moet worden 
-omgezet in LINQ expressies om zo gebruikt te worden in de query. Nadat alles in LINQ expressies is gezet zal het 
-weer worden omgezet in SQL code waarna het uitgevoerd wordt. Dit betekent dat er twee vertaal stappen moeten worden 
-uitgevoerd voordat de query kan worden uitgevoerd. Hierdoor is de uitvoeringstijd trager als bij een query waar alleen 
-gewerkt werd met LINQ expressies.
+Nu haalt Dapper ook de bijbehorende data op. Echter zal hij deze nog niet goed mappen,
+de volgende stap is om Dapper uit te leggen hoe wij de data graag gemapt willen hebben. Hieronder staat een voorbeeld hoe dit in zijn werking gaat.
 
-Uit dit onderzoek blijkt dat Dapper een lagere uitvoeringstijd heeft bij het ophalen van entiteiten uit een database 
-maar heeft meer technische kennis nodig van SQL. Entity Framework biedt daarentegen meer functionaliteit en een lagere leercurve 
-dankzij LINQ. Het kiezen tussen Dapper en Entity Framework hangt af van de eisen van de opdrachtgevers of de developers. 
-Projecten waarbij snelle ophaaltijden nodig zijn, kan beter gekozen worden voor Dapper doordat de uitvoeringstijden lager zijn dan bij Entity Framework. 
-In gevallen waarbij developers zich niet willen druk maken over het schrijven van SQL code dan kan er beter gekozen worden 
-voor Entity Framework waarbij er gebruikgemaakt kan worden van LINQ expressies.
+```csharp
+    public Flight? GetFlight(int id)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        connection.Open();
+        var sql = $"""
+                   
+                           SELECT 
+                               f.Id, 
+                               f.DepartureTime, 
+                               f.ArrivalTime, 
+                               f.Price, 
+                               f.PlaneId, 
+                               p.Id, 
+                               p.Model 
+                           FROM Flights f
+                           INNER JOIN Planes p ON f.PlaneId = p.Id
+                           WHERE f.Id = @Id
+                   """;
 
-Bronnen
-<ul>
-    <li>https://www.c-sharpcorner.com/article/dapper-vs-entity-framework-core/ - Geraadpleegd op 9 oktober 2024</li>
-    <li>https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a - Geraadpleegd op 9 oktober 2024</li>
-    <li>https://www.learndapper.com/dapper-vs-entity-framework - Geraadpleegd op 9 oktober 2024</li>
-    <li>https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382 - Geraadpleegd op 9 oktober 2024</li>
-    <li>https://www.learndapper.com/</li>
-    <li>https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver - Geraadpleegd op 9 oktober 2024</li>
-    <li>https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382 - Geraadpleegd op 9 oktober 2024</li>`
-</ul>
+        return connection.Query<Flight, Plane, Flight>(sql, (flight, plane) =>
+                {
+                    flight.Plane = plane;
+                    return flight;
+                },
+                splitOn: "PlaneId",
+                param: new { Id = id })
+            .FirstOrDefault();
+    }
+```
+
+Door middel van een lambda-functie met daarin parameters ontvang je de gemapde data van zowel de data van de huidige 
+entiteit als de gerelateerde entiteit. En geef je aan Dapper aan hoe hij gerelateerde data moet mappen. 
+Door de splitOn property toe te voegen vertel je Dapper wanneer hij moet gaan beginnen met het mappen van de volgende entiteit gerelateerde entiteit.
+
+### 3. Statements schrijven met Dapper
+Naast het ophalen van alle vluchten willen gebruikers zich ook aanmelden bij de applicatie. 
+Er moeten hiervoor ook statements worden geschreven met Dapper. Dit gaat eigenlijk op dezelfde manier als een query. 
+Hieronder staat een voorbeeld van een insert statement met Dapper:
+
+Hierbij komt weer de extension method terug die een geparametriseerde statement probeert uit te voeren over een SQLconnection. 
+Het object dat vervolgens geïnjecteerd moet worden, geef je via een parameter mee aan deze methode.
+
+### 4. Installeren benchmark tool
+
+Om de performance te vergelijken tussen entity framework en Dapper maken we gebruik van benchmark dotnet. 
+Volgens de <a href="https://benchmarkdotnet.org/articles/overview.html">documentatie van benchmark dotnet</a> moeten we deze als eerst installeren via nuget. 
+Open de terminal in het benchmark project en voor het volgende commando uit:
+
+Hierna staat benchmark dotnet geïnstalleerd en hoeft deze alleen geconfigureerd te worden. Waarna de benchmark geschreven kan worden. 
+Hoe dit moet laat ik in deze tutorial achterwege maar het uiteindelijke resultaat vind je <a href="https://github.com/hanaim-devops/devops-blog-kriebslang/tree/main/CheapestPlaneTickets">hier</a> terug.
+
+### 5. Benchmarking
+
+De benchmark die geschreven is in de vorige stap, gaan we nu uitvoeren zodat we kunnen vergelijken hoe Dapper presteert ten 
+opzichte van Entity Framework op het gebied van query prestaties. De benchmark kun je uitvoeren door het volgende commando 
+in de terminal van het benchmark project te typen:
+
+Deze commando zal de benchmark starten. Als ik de benchmark uitvoer krijg ik onderstaande resultaten terug. 
+Hierin is duidelijk te zien dat Dapper sneller is dan Entity Framework. Dit heeft te maken met het feit dat Entity Framework 
+eerst een LINQ query moet vertalen naar SQL.
+
+<img src="plaatjes/benchmark-small.png" />
+
+Volgens de <a href="https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver">entity framework docs</a> is er ook functionaliteit binnen Entity Framework waarmee je
+query’s kan uitvoeren zonder de vertaalslag van SQL naar LINQ. Hieronder staat nog een benchmark waarbij ook deze functionaliteit gebruikt wordt in de benchmark:
+
+<img src="plaatjes/benchmark-with-raw.png" />
+
+Dit geeft niet het resultaat waar we gehoopt op hadden. Microsoft beschrijft in dit <a href="https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver">artikel</a> dat deze functionaliteit voor een andere intentie ontwikkeld is. 
+Het moet namelijk gebruikt worden om SQL te combineren met LINQ. 
+Nu zal hij tweemaal de compilestap doorlopen. Eenmaal om de SQL om te zetten naar LINQ waarna hij de LINQ weer omzet 
+naar SQL die hij vervolgens gaat uitvoeren op de database. Dit verklaart de langere uitvoeringsduur. Ook Cantekin deed een 
+<a href="https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382">benchmark</a> 
+waarbij hij tot dezelfde conclusie kwam.
+
+#### Grotere dataset
+Het vorige voorbeeld is uitgevoerd op een kleine dataset lees ongeveer honderd records. Wat gebeurt er als we de dataset 
+vergroten naar ongeveer honderdduizend records? Is het resultaat dan hetzelfde? Dit heb ik uitgevoerd met het onderstaande resultaat:
+
+<img src="plaatjes/benchmark-large.png" />
+
+Hierbij valt op dat het verschil tussen Dapper en Entity Framework groter wordt naarmate de dataset groeit. 
+Bij de kleinere dataset was het gemiddelde verschil tussen Dapper en Entity Framework kleiner dan bij de grote.
+
+## Conclusie
+Beide ORM’s bieden eigen voordelen voor het gebruik van de een boven de ander. Entity Framework zorgt ervoor dat developers 
+zich bijna geen zorgen hoeven te maken over het schrijven van SQL query’s. Echter blijkt uit dit onderzoek dat Entity Framework minder 
+goed scoort op het gebied van query prestaties. Bij grotere datasets wordt het prestatieverschil tussen Dapper en Entity Framework alleen maar groter. 
+Daarom is de keuze tussen beide frameworks afhankelijk van de specifieke projectvereisten: kies Dapper voor optimale prestaties en controle, 
+en Entity Framework voor eenvoud en productiviteit.
+
+## Bronnen
+
+1. Mahajan, H. (2024, 9 oktober). *Dapper vs EF Core: Which ORM framework should you choose for your .NET application?* Level Up Coding. Geraadpleegd van [https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a](https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a)
+
+2. Learn Dapper. (z.d.). *Dapper vs Entity Framework*. Geraadpleegd op 9 oktober 2024 van [https://www.learndapper.com/dapper-vs-entity-framework](https://www.learndapper.com/dapper-vs-entity-framework)
+
+3. Cantekin, S. (z.d.). *The big fight: Dapper vs Entity Framework detailed benchmark*. Medium. Geraadpleegd op 9 oktober 2024 van [https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382](https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382)
+
+4. Learn Dapper. (z.d.). *Learn Dapper*. Geraadpleegd op 9 oktober 2024 van [https://www.learndapper.com/](https://www.learndapper.com/)
+
+5. Microsoft. (z.d.). *SQL queries*. Learn Microsoft. Geraadpleegd op 9 oktober 2024 van [https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver](https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver)
+
 
 
 
