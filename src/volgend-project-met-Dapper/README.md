@@ -16,10 +16,13 @@ De hoofdzaak van deze blogpost is het leren begrijpen van hoe data kan worden be
 verhoudt met Entity Framework op het gebied van gebruiksvriendelijkheid, performance en learnability. Daarbij beschouw 
 ik hoe Entity Framework precies werkt als bijzaak. Hierover worden in deze hands-on geen concrete voorbeelden gegeven.
 
+<img src="plaatjes/logo.png">
+
 ## Cheapest Flight Tickets
 
 ### 1. Opzetten Applicatie
-In deze hands-on tutorial richten we ons op het opzetten van een solution voor een fictieve applicatie genaamd ‘Cheapest Flight Tickets’. 
+In deze hands-on tutorial richten we ons op het opzetten van een solution voor een fictieve applicatie genaamd ‘Cheapest Flight Tickets’ waarop gebruikers
+fictief de goedkoopste vliegtickets kunnen bekijken. 
 Het doel van deze applicatie is om de performance van Dapper te vergelijken met die van Entity Framework in een benchmark. 
 Deze solution bevat de volgende twee projecten:
 - CheapestFlightTickets.Benchmark: Dit is een console project, hierin worden de benchmarks uitgevoerd om de performance te vergelijken. 
