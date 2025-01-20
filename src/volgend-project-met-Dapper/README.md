@@ -1,10 +1,9 @@
 # Volgend project met Dapper?
 Bij het bouwen van .NET applicaties spelen ORM’s een grote rol voor het ophalen van data. Twee populaire opties zijn Dapper, 
 een mico-ORM, en Entity Framework, een full-featured ORM. Beide ORM’s hebben beide hun eigen aanpak voor het ophalen van data. 
-Entity Framework zorgt ervoor dat developers zich geen druk hoeven te maken over het schrijven van SQL of het zelf uitvoeren van migraties 
-op een database. Dapper daarentegen dwingt de developer hierbij om zelf zijn 
-verantwoordelijkheid te nemen. Het zelf schrijven van SQL en het zelf uitvoeren van migraties op de database zijn taken 
-die vallen onder de verantwoordelijkheid van de gebruiker (<a src="https://www.learndapper.com/dapper-vs-entity-framework">Learn Dapper</a>, 17 oktober 2024). In deze blogpost ga ik door middel van een hands-on karakter 
+Entity Framework zorgt ervoor dat developers zich niet hoeven bezig te houden met het schrijven van complexe code.
+Dapper daarentegen dwingt de developer hierbij om zelf zijn 
+verantwoordelijkheid te nemen. (<a src="https://www.learndapper.com/dapper-vs-entity-framework">Learn Dapper</a>, 17 oktober 2024). In deze blogpost ga ik door middel van een hands-on karakter 
 onderzoek doen naar hoe Dapper werkt en waarom jouw volgend project misschien wel Dapper moet gebruiken.
 
 <img src="plaatjes/dapper.jpg" width="250" align="right" alt="dapper logo" title="dapper">
