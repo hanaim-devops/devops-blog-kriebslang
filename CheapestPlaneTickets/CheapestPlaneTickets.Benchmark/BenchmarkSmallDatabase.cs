@@ -7,7 +7,7 @@ using Microsoft.Data.SqlClient;
 
 namespace CheapestPlaneTickets.Benchmark;
 
-public class Benchmark
+public class BenchmarkSmallDatabase
 {
     private CheapestPlaneTicketsDbContext _context;
     
