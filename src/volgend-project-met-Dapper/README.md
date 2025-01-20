@@ -245,6 +245,8 @@ en Entity Framework voor eenvoud en productiviteit.
 
 5. Microsoft. (z.d.). *SQL queries*. Learn Microsoft. Geraadpleegd op 9 oktober 2024 van [https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver](https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver)
 
+6. Saffron, S. (2011, 30 maart). *How I learned to stop worrying and write my own ORM*. Sam Saffron. Geraadpleegd op 9 oktober 2024 van [https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM](https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM)
+
 
 
 
