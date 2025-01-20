@@ -169,9 +169,22 @@ entiteit als de gerelateerde entiteit. En geef je aan Dapper aan hoe hij gerelat
 Door de splitOn property toe te voegen vertel je Dapper wanneer hij moet gaan beginnen met het mappen van de volgende entiteit gerelateerde entiteit.
 
 ### 3. Statements schrijven met Dapper
-Naast het ophalen van alle vluchten willen gebruikers zich ook aanmelden bij de applicatie. 
+Naast het ophalen van vluchten moeten er ook vluchten kunnen worden toegevoegd.
 Er moeten hiervoor ook statements worden geschreven met Dapper. Dit gaat eigenlijk op dezelfde manier als een query. 
 Hieronder staat een voorbeeld van een insert statement met Dapper:
+
+```csharp
+    public void AddFlight(Flight flight)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        connection.Open();
+        var sql = @"
+        INSERT INTO Flights (Origin, Destination, DepartureTime, ArrivalTime, Price, PlaneId)
+        VALUES (@Origin, @Destination, @DepartureTime, @ArrivalTime, @Price, @PlaneId)";
+
+        connection.Execute(sql, flight);
+    }
+```
 
 Hierbij komt weer de extension method terug die een geparametriseerde statement probeert uit te voeren over een SQLconnection. 
 Het object dat vervolgens geïnjecteerd moet worden, geef je via een parameter mee aan deze methode.
