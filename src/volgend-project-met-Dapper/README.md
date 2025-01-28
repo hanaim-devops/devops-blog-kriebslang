@@ -32,12 +32,10 @@ Google Stack Overflow ging indexen bleken er al snel performance problemen op te
 
 "This process is usually pretty fast, however when its happening 100,000 times a day in huge bursts … it can get a bit costly." - <a href="https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM">Sam Saffron</a> (2011)
 
-Dapper is ontwikkeld om deze problemen op te lossen. Waarbij de focus lag op performance en eenvoud. In de volgende hands-on tutorial gaan we testen wat de performance 
-verschillen zijn tussen Dapper en Entity Framework op het gebied van query prestaties.
-
-<img src="plaatjes/logo.png">
+Dapper is ontwikkeld om deze problemen op te lossen. Waarbij de focus lag op performance en eenvoud. In de volgende hands-on tutorial gaan we testen wat de performance verschillen zijn tussen Dapper en Entity Framework op het gebied van query prestaties.
 
 ## Cheapest Flight Tickets
+
 In deze hands-on tutorial richten we ons op het opzetten van een solution voor een fictieve applicatie genaamd ‘Cheapest Flight Tickets’ waarop gebruikers
 fictief de goedkoopste vliegtickets kunnen bekijken.
 Het doel van deze applicatie is om de performance van Dapper te vergelijken met die van Entity Framework in een benchmark.
@@ -46,7 +44,8 @@ De hoofdzaak van deze blogpost is het leren begrijpen van hoe data kan worden be
 verhoudt met Entity Framework op het gebied van gebruiksvriendelijkheid, performance en learnability. Daarbij beschouw
 ik hoe Entity Framework precies werkt als bijzaak. Hierover worden in deze hands-on geen concrete voorbeelden gegeven.
 
-### 1. Opzetten Applicatie 
+### 1. Opzetten Applicatie
+
 Als eerste gaan we de applicatie opzetten. Deze solution bevat de volgende twee projecten:
 - CheapestFlightTickets.Benchmark: Dit is een console project, hierin worden de benchmarks uitgevoerd om de performance te vergelijken. 
 Dit project bevat de benchmark-logica en meet hoe snel Dapper en Entity Framework operaties kunnen uitvoeren.
@@ -65,6 +64,7 @@ De volgende stap is het installeren en configureren van Entity Framework zodat e
 De volgende stap is het schrijven van Dapper query’s.
 
 ### 2. Query's schrijven met Dapper
+
 Gebruikers van Cheapest Flight Tickets willen graag een lijst van vluchten kunnen inzien met een prijs erbij. 
 Hiervoor moet er een Dapper query worden geschreven die deze lijst met vluchten kan ophalen uit de database. 
 Hieronder staat een voorbeeld van hoe een query kan worden opgesteld met Dapper:
@@ -100,6 +100,7 @@ zelf SQL moet schrijven terwijl bij Entity Framework dit voor jou geregeld wordt
 Dapper biedt echter wel de mogelijkheid tot het gebruik van geparametriseerde query’s zoals je in het voorbeeld ziet.
 
 #### Multimapping
+
 Vorig voorbeeld mist nog iets. Model Flight kent namelijk een one-to-one-relation met Plane. Dapper laadt niet automatisch gerelateerde entiteiten. 
 Gebruikers moeten zelf joins schrijven om data uit andere tabellen erbij op te halen. Dapper biedt echter wel de mogelijkheid om gerelateerde data te mappen. 
 Als we de vorige query er weer bij pakken en we breiden deze verder uit met een join om het bijbehorende vliegtuig op te halen dan krijg je het volgende resultaat:
@@ -169,6 +170,7 @@ entiteit als de gerelateerde entiteit. En geef je aan Dapper aan hoe hij gerelat
 Door de splitOn property toe te voegen vertel je Dapper wanneer hij moet gaan beginnen met het mappen van de volgende entiteit gerelateerde entiteit.
 
 ### 3. Statements schrijven met Dapper
+
 Naast het ophalen van vluchten moeten er ook vluchten kunnen worden toegevoegd.
 Er moeten hiervoor ook statements worden geschreven met Dapper. Dit gaat eigenlijk op dezelfde manier als een query. 
 Hieronder staat een voorbeeld van een insert statement met Dapper:
@@ -228,6 +230,7 @@ Dit geeft niet het resultaat waar we gehoopt op hadden. Microsoft beschrijft in 
 Nu zal hij tweemaal de compilestap doorlopen. Eenmaal om de SQL om te zetten naar LINQ en nogmaals om LINQ weer om te zetten naar SQL die hij uitvoert op de database. Dit verklaart de langere uitvoeringsduur. Ook Software Developer Salih Cantekin (2022) deed een [benchmark](https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382) waarbij hij tot dezelfde conclusie kwam.
 
 #### Grotere dataset
+
 Het vorige voorbeeld is uitgevoerd op een kleine dataset lees ongeveer honderd records. Wat gebeurt er als we de dataset 
 vergroten naar ongeveer honderdduizend records? Is het resultaat dan hetzelfde? Dit heb ik uitgevoerd met het onderstaande resultaat:
 
@@ -237,6 +240,7 @@ Hierbij valt op dat het verschil tussen Dapper en Entity Framework groter wordt 
 Bij de kleinere dataset was het gemiddelde verschil tussen Dapper en Entity Framework kleiner dan bij de grote.
 
 ## Conclusie
+
 Beide ORM’s bieden eigen voordelen voor het gebruik van de een boven de ander. Entity Framework zorgt ervoor dat developers 
 zich bijna geen zorgen hoeven te maken over het schrijven van SQL query’s. Echter blijkt uit dit onderzoek dat Entity Framework minder 
 goed scoort op het gebied van query prestaties. Bij grotere datasets wordt het prestatieverschil tussen Dapper en Entity Framework alleen maar groter. 
@@ -250,8 +254,3 @@ en Entity Framework voor eenvoud en productiviteit.
 - Cantekin, S. (z.d.). *The big fight: Dapper vs Entity Framework detailed benchmark*. Medium. Geraadpleegd op 9 oktober 2024 van [https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382](https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382)
 - Patel et al. (2023, 24 aug). *SQL queries*. Learn Microsoft. Geraadpleegd op 9 oktober 2024 van [https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver](https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver)
 - Saffron, S. (2011, 30 maart). *How I learned to stop worrying and write my own ORM*. Sam Saffron. Geraadpleegd op 9 oktober 2024 van [https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM](https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM)
-
-
-
-
-
