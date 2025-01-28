@@ -20,8 +20,6 @@ data op te halen uit een database zonder het schrijven van complexe code (<a hre
 Dapper behoort tot de categorie van Micro ORM's, wat betekent dat het specifiek ontworpen is om queryresultaten snel te mappen naar objecten, 
 maar zonder veel van de uitgebreide functionaliteiten die traditionele ORMs zoals Entity Framework bieden. 
 
-![img.png](img.png)
-
 Dit onderscheid wordt goed geïllustreerd in de bovenstaande tabel. Hierin zien we dat Dapper (als Micro ORM) voornamelijk 
 focust op het eenvoudig mappen van queries naar objecten, terwijl uitgebreide features zoals change tracking, caching van resultaten, 
 en ondersteuning voor lazy loading ontbreken. Deze eigenschappen worden daarentegen wel ondersteund door traditionele ORMs zoals Entity Framework.
