@@ -1,17 +1,20 @@
 # Volgend project met Dapper?
-Bij het bouwen van .NET applicaties spelen ORM’s een grote rol voor het ophalen van data. Twee populaire opties zijn Dapper, 
-een mico-ORM, en Entity Framework, een full-featured ORM. Beide ORM’s hebben beide hun eigen aanpak voor het ophalen van data. 
-Entity Framework zorgt ervoor dat developers zich niet hoeven bezig te houden met het schrijven van complexe code.
-Dapper daarentegen dwingt de developer hierbij om zelf zijn 
-verantwoordelijkheid te nemen. (<a src="https://www.learndapper.com/dapper-vs-entity-framework">Learn Dapper</a>, 17 oktober 2024). In deze blogpost ga ik door middel van een hands-on karakter 
-onderzoek doen naar hoe Dapper werkt en waarom jouw volgend project misschien wel Dapper moet gebruiken.
 
 <img src="plaatjes/dapper.jpg" width="250" align="right" alt="dapper logo" title="dapper">
 
-*[Jochem Kalsbeek, oktober 2024.](https://github.com/hanaim-devops/blog-student-naam)*
+*[Jochem Kalsbeek, oktober 2024](https://github.com/hanaim-devops/devops-blog-kriebslang/)*
+
 <hr/>
 
+Bij het bouwen van .NET applicaties spelen Object Relational Mappers (ORM’s) een grote rol voor het ophalen van data. Twee populaire opties zijn Dapper, 
+een mico-ORM, en Entity Framework, een full-featured ORM. Beide ORM’s hebben hun eigen aanpak voor het ophalen van data. 
+
+Entity Framework zorgt ervoor dat developers zich niet hoeven bezig te houden met het schrijven van complexe code.
+Dapper daarentegen dwingt de developer hierbij om zelf zijn verantwoordelijkheid te nemen. (<a src="https://www.learndapper.com/dapper-vs-entity-framework">Learn Dapper</a>, 17 oktober 2024). In deze blogpost ga ik door middel van een hands-on karakter 
+onderzoek doen naar hoe Dapper werkt en waarom jouw volgend project misschien wel Dapper moet gebruiken.
+
 ## Wat is Dapper?
+
 Dapper is een open-source object-relational mapping (ORM) framework voor .NET. Deze library maakt het developers mogelijk om snel en gemakkelijk
 data op te halen uit een database zonder het schrijven van complexe code (<a href="https://www.learndapper.com/">Learndapper</a>, 17 oktober 2024).
 Dapper behoort tot de categorie van Micro ORM's, wat betekent dat het specifiek ontworpen is om queryresultaten snel te mappen naar objecten, 
@@ -29,7 +32,7 @@ Dapper is geschreven door de bedenker van Stack Overflow, Sam Saffron. Zij hebbe
 Stack Overflow werkte op Entity Framework waarbij bedacht was dat de LINQ2SQL queries snel genoeg zouden zijn. Maar wanneer
 Google Stack Overflow ging indexen bleken er al snel performance problemen op te treden. 
 
-"This process is usually pretty fast, however when its happening 100,000 times a day in huge bursts … it can get a bit costly." - <a href="https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM">Sam Saffron</a>, 2011
+"This process is usually pretty fast, however when its happening 100,000 times a day in huge bursts … it can get a bit costly." - <a href="https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM">Sam Saffron</a> (2011)
 
 Dapper is ontwikkeld om deze problemen op te lossen. Waarbij de focus lag op performance en eenvoud. In de volgende hands-on tutorial gaan we testen wat de performance 
 verschillen zijn tussen Dapper en Entity Framework op het gebied van query prestaties.
@@ -222,12 +225,9 @@ query’s kunnen worden opgebouwd met SQL (<a href="https://learn.microsoft.com/
 
 <img src="plaatjes/benchmark-with-raw.png" />
 
-Dit geeft niet het resultaat waar we gehoopt op hadden. Microsoft beschrijft in dit <a href="https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver">artikel</a> dat deze functionaliteit voor een andere intentie ontwikkeld is. 
-Het moet namelijk gebruikt worden om SQL te combineren met LINQ. 
-Nu zal hij tweemaal de compilestap doorlopen. Eenmaal om de SQL om te zetten naar LINQ waarna hij de LINQ weer omzet 
-naar SQL die hij vervolgens gaat uitvoeren op de database. Dit verklaart de langere uitvoeringsduur. Ook Cantekin deed een 
-<a href="https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382">benchmark</a> 
-waarbij hij tot dezelfde conclusie kwam.
+Dit geeft niet het resultaat waar we gehoopt op hadden. Microsoft beschrijft in [dit artikel](https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver">dat deze functionaliteit voor een andere intentie ontwikkeld is. Het moet namelijk gebruikt worden om SQL te combineren met LINQ. 
+
+Nu zal hij tweemaal de compilestap doorlopen. Eenmaal om de SQL om te zetten naar LINQ en nogmaals om LINQ weer om te zetten naar SQL die hij uitvoert op de database. Dit verklaart de langere uitvoeringsduur. Ook Software Developer Salih Cantekin (2022) deed een [benchmark](https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382) waarbij hij tot dezelfde conclusie kwam.
 
 #### Grotere dataset
 Het vorige voorbeeld is uitgevoerd op een kleine dataset lees ongeveer honderd records. Wat gebeurt er als we de dataset 
@@ -247,17 +247,11 @@ en Entity Framework voor eenvoud en productiviteit.
 
 ## Bronnen
 
-1. Mahajan, H. (2024, 9 oktober). *Dapper vs EF Core: Which ORM framework should you choose for your .NET application?* Level Up Coding. Geraadpleegd van [https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a](https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a)
-
-2. Learn Dapper. (z.d.). *Dapper vs Entity Framework*. Geraadpleegd op 9 oktober 2024 van [https://www.learndapper.com/dapper-vs-entity-framework](https://www.learndapper.com/dapper-vs-entity-framework)
-
-3. Cantekin, S. (z.d.). *The big fight: Dapper vs Entity Framework detailed benchmark*. Medium. Geraadpleegd op 9 oktober 2024 van [https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382](https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382)
-
-4. Learn Dapper. (z.d.). *Learn Dapper*. Geraadpleegd op 9 oktober 2024 van [https://www.learndapper.com/](https://www.learndapper.com/)
-
-5. Microsoft. (z.d.). *SQL queries*. Learn Microsoft. Geraadpleegd op 9 oktober 2024 van [https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver](https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver)
-
-6. Saffron, S. (2011, 30 maart). *How I learned to stop worrying and write my own ORM*. Sam Saffron. Geraadpleegd op 9 oktober 2024 van [https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM](https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM)
+- Mahajan, H. (2024, 9 oktober). *Dapper vs EF Core: Which ORM framework should you choose for your .NET application?* Level Up Coding. Geraadpleegd van [https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a](https://levelup.gitconnected.com/dapper-vs-ef-core-which-orm-framework-should-you-choose-for-your-net-application-54f2723b176a)
+- ZZZ Projects (17-10-2024). *Dapper vs Entity Framework*. Learndapper.com. Geraadpleegd op 9 oktober 2024 van [https://www.learndapper.com/dapper-vs-entity-framework](https://www.learndapper.com/dapper-vs-entity-framework)
+- Cantekin, S. (z.d.). *The big fight: Dapper vs Entity Framework detailed benchmark*. Medium. Geraadpleegd op 9 oktober 2024 van [https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382](https://salihcantekin.medium.com/the-big-fight-dapper-vs-entity-framework-detailed-benchmark-2345af933382)
+- Patel et al. (2023, 24 aug). *SQL queries*. Learn Microsoft. Geraadpleegd op 9 oktober 2024 van [https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver](https://learn.microsoft.com/en-us/ef/core/querying/sql-queries?tabs=sqlserver)
+- Saffron, S. (2011, 30 maart). *How I learned to stop worrying and write my own ORM*. Sam Saffron. Geraadpleegd op 9 oktober 2024 van [https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM](https://samsaffron.com/archive/2011/03/30/How+I+learned+to+stop+worrying+and+write+my+own+ORM)
 
 
 
